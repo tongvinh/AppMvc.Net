@@ -61,11 +61,6 @@ app.AddStatusCodePages(); // tuỳ biến thông tin lỗi Response : 400 -599
 
 app.UseEndpoints(endpoints =>
 {
-  //
-  endpoints.MapGet("/sayhi", async (context) =>
-  {
-    await context.Response.WriteAsync($"Hello ASP.NET MVC {DateTime.Now}");
-  });
 
   // endpoints.MapControllers
   // endpoints.MapControllerRoute
@@ -77,30 +72,11 @@ app.UseEndpoints(endpoints =>
   // action =>
   // area =>
 
+  // URL: /{controller}/{action}/{id?}
+  // First/Index
   endpoints.MapControllerRoute(
-    name: "first",
-    pattern: "{url:regex(^((xemsanpham)|(viewproduct))$)}/{id:range(2,4)}",
-    defaults: new
-    {
-      controller = "First",
-      action = "ViewProduct"
-    }
-  // constraints: new {
-  // url = "xemsanpham",
-  // url = new RegexRouteConstraint(@"^((xemsanpham)|(viewproduct))$"),
-  // id = new RangeRouteConstraint(2,4)
-  // }
-  );
-  endpoints.MapControllerRoute(
-    name: "firstroute",
-    pattern: "start-here/{controller=Home}/{action=Index}/{id?}" // start-here, start-here/2, start-here/...
-                                                                 // defaults: new
-                                                                 // {
-                                                                 // controller = "First",
-                                                                 // action = "ViewProduct",
-                                                                 // id = 3
-                                                                 // }
-    );
+      name: "default",
+      pattern: "{controller=Home}/{action=Index}/{id?}");
 
   endpoints.MapRazorPages();
 });

@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using App.Models.Contacts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -21,5 +22,7 @@ namespace App.Models
     {
       base.OnModelCreating(modelBuilder);
     }
+
+    public DbSet<Contact> Contacts { get; set; }
   }
 }
