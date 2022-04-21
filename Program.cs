@@ -1,6 +1,7 @@
 
 using System.Net;
 using App.AppMVC;
+using App.Data;
 using App.ExtendMethods;
 using App.Models;
 using App.Services;
@@ -100,12 +101,21 @@ builder.Services.AddAuthentication()
   });
 
 builder.Services.AddOptions();  //Kích hoat Options
-// var mailsettings = configuration.GetSection("MailSettings");  // Đọc config
-// builder.Services.Configure<MailSettings>(mailsettings);       //Đăng ký đê inject
-// // Đăng ký SendMailService với kiểu Transient, mỗi lần gọi dịch
-// // vụ ISendMailService một đới tượng SendMailService tạo ra (đã inject config)
-// builder.Services.AddSingleton<IEmailSender, SendMailService>();
-// builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
+var mailsettings = configuration.GetSection("MailSettings");  // Đọc config
+builder.Services.Configure<MailSettings>(mailsettings);       //Đăng ký đê inject
+// Đăng ký SendMailService với kiểu Transient, mỗi lần gọi dịch
+// vụ ISendMailService một đới tượng SendMailService tạo ra (đã inject config)
+builder.Services.AddSingleton<IEmailSender, SendMailService>();
+builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
+
+builder.Services.AddAuthorization(options =>
+{
+  options.AddPolicy("ViewManageMenu", builder =>
+  {
+    builder.RequireAuthenticatedUser();
+    builder.RequireRole(RoleName.Administrator);
+  });
+});
 
 var app = builder.Build();
 var startUp = new StartUp(environment);
