@@ -1,10 +1,10 @@
-using System.Linq.Expressions;
+
+using App.Models;
+using App.Models.Blog;
 using App.Models.Contacts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+
 
 namespace App.Models
 {
@@ -12,11 +12,10 @@ namespace App.Models
   {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-
     }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder builder)
     {
-      base.OnConfiguring(optionsBuilder);
+      base.OnConfiguring(builder);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,8 +29,13 @@ namespace App.Models
           entityType.SetTableName(tableName.Substring(6));
         }
       }
+      modelBuilder.Entity<Category>(entity =>
+      {
+        entity.HasIndex(c => c.Slug)
+              .IsUnique();
+      });
     }
-
     public DbSet<Contact> Contacts { get; set; }
+    public DbSet<Category> Categories { get; set; }
   }
 }
