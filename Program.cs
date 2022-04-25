@@ -1,4 +1,5 @@
 
+using System.Net.NetworkInformation;
 using System.Net;
 using App.AppMVC;
 using App.Data;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,8 @@ builder.Services.Configure<RazorViewEngineOptions>(options =>
   //{2} -> Ten Areas
   // options.ViewLocationFormats.Add("/MyView/{1}/{0}.cshtml");
   options.ViewLocationFormats.Add("/MyView/{1}/{0}" + RazorViewEngine.ViewExtension);
+
+  options.AreaViewLocationFormats.Add("/MyAreas/{2}/Views/{1}/{0}.cshtml");
 });
 
 // builder.Services.AddSingleton<ProductService,ProductService>();
@@ -131,6 +135,14 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+// /contents/1.jpg => Uploads/1.jpg
+app.UseStaticFiles(new StaticFileOptions()
+{
+  FileProvider = new PhysicalFileProvider(
+    Path.Combine(Directory.GetCurrentDirectory(), "Uploads")
+  ),
+  RequestPath = "/contents"
+});
 app.UseRouting();
 
 app.UseAuthentication(); //Xac thuc danh tinh
@@ -153,10 +165,17 @@ app.UseEndpoints(endpoints =>
 
   // URL: /{controller}/{action}/{id?}
   // First/Index
+
+  endpoints.MapAreaControllerRoute(
+     name: "product",
+     pattern: "/{controller}/{action=Index}/{id?}",
+     areaName: "ProductManage"
+   );
+  //Controller không có Area
   endpoints.MapControllerRoute(
       name: "default",
       pattern: "{controller=Home}/{action=Index}/{id?}");
-
+      
   endpoints.MapRazorPages();
 });
 

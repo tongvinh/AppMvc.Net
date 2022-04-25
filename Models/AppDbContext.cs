@@ -1,11 +1,7 @@
-
-using App.Models;
 using App.Models.Blog;
 using App.Models.Contacts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
-
 namespace App.Models
 {
   public class AppDbContext : IdentityDbContext<AppUser>
@@ -34,8 +30,20 @@ namespace App.Models
         entity.HasIndex(c => c.Slug)
               .IsUnique();
       });
+
+      modelBuilder.Entity<PostCategory>(entity =>
+      {
+        entity.HasKey(c => new { c.PostID, c.CategoryID });
+      });
+
+      modelBuilder.Entity<Post>(entity =>
+      {
+        entity.HasIndex(p => p.Slug).IsUnique();
+      });
     }
     public DbSet<Contact> Contacts { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Post> Posts { get; set; }
+    public DbSet<PostCategory> PostCategories { get; set; }
   }
 }
