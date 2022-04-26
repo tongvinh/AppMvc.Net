@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-namespace App.Areas.Blog.Controllers
+namespace AppMvc.Areas.Blog.Controllers
 {
   [Area("Blog")]
   [Route("admin/blog/category/[action]/{id?}")]
