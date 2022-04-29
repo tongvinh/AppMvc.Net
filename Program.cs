@@ -42,7 +42,7 @@ builder.Services.Configure<RazorViewEngineOptions>(options =>
 
 // builder.Services.AddSingleton<ProductService,ProductService>();
 // builder.Services.AddSingleton(typeof(ProductService));
-builder.Services.AddSingleton(typeof(ProductService), typeof(ProductService));
+// builder.Services.AddSingleton(typeof(ProductService), typeof(ProductService));
 
 //Dang ky Identity
 builder.Services.AddIdentity<AppUser, IdentityRole>()
